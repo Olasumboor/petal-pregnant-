@@ -1,0 +1,6 @@
+{
+  "name": "Pregnancy Companion",
+  "description": "Tailored maternal wellness tracker with symptom journals, diet plans, and personalized insights.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
