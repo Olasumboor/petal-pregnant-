@@ -188,7 +188,7 @@ app.post("/api/ask-diet", async (req, res) => {
       .map(([k, v]) => `${k}: ${v}`)
       .join(", ") || "none entered yet";
 
-    const prompt = `System guidance: You are Petal's Maternal Nutritionist AI.
+    const prompt = `System guidance: You are Petal's Maternal Nutritionist AI specialized in international gestational diets, including West African/Nigerian healthy traditional foods.
 Help the mother design nourishing, pregnancy-safe meals and snacks.
 
 DIET QUERY: "${question}"
@@ -201,7 +201,7 @@ HEALTH PROFILE DETAILS:
 
 Provide a warm, inspiring 3-paragraph answer:
 1. Direct solutions for her symptom/question (e.g. food options for intense morning nausea, optimal foods for iron absorption, low-GI snacks for glucose balance).
-2. Recommend 4 specific, nutritious, delicious ingredients or local meals that are highly safe, appetizing, and targeted to her health metrics.
+2. Recommend 4 specific, nutritious, delicious ingredients or local meals that are highly safe, appetizing, and targeted to her health metrics. Emphasize authentic, high-vitality Nigerian dishes and traditional meal preps (such as steamed protein-rich Moin-Moin, Ugu leaf infusions, unripe plantain porridge, efirin/scent-leaf broths, fermented guinea corn Ogi, or smart-carb brown Jollof rice balanced for gestation) where appropriate.
 3. Keep the advice deeply positive, encouraging, and centered on nourishing both her body and the growing child.`;
 
     const response = await ai.models.generateContent({

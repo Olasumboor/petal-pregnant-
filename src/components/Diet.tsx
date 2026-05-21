@@ -10,7 +10,7 @@ interface DietProps {
 }
 
 export default function Diet({ vitals, drNotes, week }: DietProps) {
-  const [activeSubTab, setActiveSubTab] = useState<"essentials" | "iron" | "glycemic" | "mealplan" | "customai">("essentials");
+  const [activeSubTab, setActiveSubTab] = useState<"essentials" | "iron" | "glycemic" | "mealplan" | "customai" | "nigerian">("essentials");
   const [askQuery, setAskQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [aiRecipe, setAiRecipe] = useState("");
@@ -77,6 +77,7 @@ export default function Diet({ vitals, drNotes, week }: DietProps) {
           { id: "essentials", label: "⭐ ESSENTIALS" },
           { id: "iron", label: "🩸 IRON-BOOST" },
           { id: "glycemic", label: "⚖️ BLOOD SUGAR" },
+          { id: "nigerian", label: "🇳🇬 NIGERIAN MEALS" },
           { id: "mealplan", label: "📋 MEAL SCHEDULER" },
           { id: "customai", label: "✨ DIET CUSTOMIZER AI" },
         ].map((tab) => (
@@ -253,6 +254,76 @@ export default function Diet({ vitals, drNotes, week }: DietProps) {
         </motion.div>
       )}
 
+      {/* RENDER NIGERIAN MEALS */}
+      {activeSubTab === "nigerian" && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5">
+          <div className="bg-white/5 border border-[#FF3E00]/20 rounded-none p-6 border-t-4 border-t-[#FF3E00] space-y-1.5">
+            <span className="font-mono text-[9px] font-bold text-white/55 uppercase tracking-widest">[ NIGERIAN PRENATAL MEAL PREPARATIONS ]</span>
+            <h3 className="text-sm font-mono uppercase tracking-widest font-black text-white">Traditional West African Nutrition</h3>
+            <p className="text-xs text-white/60 leading-relaxed font-light">
+              Nourishing, pregnancy-safe recipe blocks using traditional ingredients calibrated to boost hemoglobin levels, secure gut biome health, and control maternal glycemic response.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              {
+                emoji: "🫘",
+                name: "Steamed Bean Pudding (Moin-Moin)",
+                target: "FOLATE & PROTEIN MASS",
+                desc: "High protein, rich in natural dietary fiber and folic acid. Helps stabilize blood sugar and counters morning nausea.",
+                prep: "Peel brown/black-eyed beans, blend with tatashe (bell pepper), onions, and fresh ginger. Gently fold in a touch of healthy vegetable oil or flaked smoked fish. Scoop into traditional Ewe leaves or ramekins, and steam slowly in 2 inches of boiling water for 45-50 minutes until set."
+              },
+              {
+                emoji: "🍲",
+                name: "Ugu & Scent Leaf Chicken Stew",
+                target: "OXYGEN COMPOSITION",
+                desc: "Maximizes maternal iron (hemoglobin) and folic acid stores. Great for energy recovery and boosting appetite.",
+                prep: "Slowly simmer diced chicken breast in a broth seasoned with onions, garlic, and fresh scent leaves (efirin, which relaxes the stomach). 3 minutes before heat removal, fold in abundant thoroughly-washed shredded green Pumpkin leaves (Ugu) to retain optimal micronutrients."
+              },
+              {
+                emoji: "🍠",
+                name: "Unripe Plantain & Smoked Catfish Porridge",
+                target: "GLYCEMIC BALANCE & BLOOD PRESSURE",
+                desc: "Low-glycemic alternative supplying starch-resistant carbohydrates, highly rich in Potassium to alleviate leg cramps.",
+                prep: "Peel and slice green unripe plantains. Cook in a base broth with a light drop of palm oil, ground crayfish, onions, and pre-soaked smoked catfish. Allow to bubble on medium heat until the plantain chunks are tender, then stir in washed leafy green spinach."
+              },
+              {
+                emoji: "🥣",
+                name: "Fermented Guinea Corn Ogi (Brown Pap)",
+                target: "PREBIOTIC SOOTHE & NAUSEA RELIEF",
+                desc: "Gentle fermented pap. Easy on the stomach during extreme first-trimester morning sickness; promotes gut flora.",
+                prep: "Dissolve 3 tablespoons of raw fermented brown guinea corn (baba ogi) paste in a cup of cool water. Pour slowly into a pot of boiling water while stirring constantly on low heat until thickness is achieved. Serve warm topped with organic soy milk powder."
+              }
+            ].map((recipe, idx) => (
+              <div key={idx} className="bg-white/5 p-5 rounded-none border border-white/10 flex flex-col gap-3 relative border-l-2 border-l-[#FF3E00] glass">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl" role="img" aria-label={recipe.name}>{recipe.emoji}</span>
+                  <div>
+                    <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider">{recipe.name}</h4>
+                    <span className="text-[8px] font-mono font-bold text-[#FF3E00] tracking-widest">{recipe.target}</span>
+                  </div>
+                </div>
+                <div className="space-y-2 text-xs">
+                  <p className="text-white/60 font-medium">{recipe.desc}</p>
+                  <p className="text-white/80 font-light border-t border-white/10 pt-2 leading-relaxed">
+                    <strong className="text-white font-mono text-[9px] uppercase tracking-wider block mb-1">👩‍🍳 PREPARATION GUIDE:</strong>
+                    {recipe.prep}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-none p-5 text-xs text-white/50 leading-relaxed font-mono text-[9px] space-y-1 glass border-l-4 border-l-[#FF3E00]">
+            <span className="text-white block font-bold uppercase tracking-widest">[ NATIONWIDE NIGERIAN GESTATIONAL COMPOSITION INSIGHT ]</span>
+            <p className="font-light">
+              West African traditional ingredients are packed with prebiotics and microelements. Prioritize sourcing dry crayfish, scent leaves, and ugu natively to keep dishes rich in bio-available iron and completely free from artificial flavor cubes which are loaded with standard chemical sodium.
+            </p>
+          </div>
+        </motion.div>
+      )}
+
       {/* RENDER CUSTOM AI */}
       {activeSubTab === "customai" && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5">
@@ -273,11 +344,12 @@ export default function Diet({ vitals, drNotes, week }: DietProps) {
               {/* Preset suggestion chips */}
               <div className="flex flex-wrap gap-1.5 pt-1">
                 {[
-                  "Nausea relief snacks in First Trimester",
-                  "Fastest recipes to build low Iron",
-                  "Low glycemic snacks to control blood sugar",
+                  "Nigerian meal prep for iron & hemoglobin",
+                  "Low-glycemic Nigerian dishes for blood sugar",
+                  "Pregnancy-safe Moin-Moin meal preparation",
+                  "First Trimester morning sickness relief with Ginger Ogi",
+                  "Nutritional value of green Ugu soup during pregnancy",
                   "Nutrition guide for sudden sweet cravings",
-                  "Gaining pregnancy weight on standard vegan diets",
                 ].map((q) => (
                   <button
                     key={q}

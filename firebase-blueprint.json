@@ -1,0 +1,70 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Biological and configuration state profile for a pregnant user",
+      "type": "object",
+      "properties": {
+        "displayName": { "type": "string", "description": "Custom name or Google persona name" },
+        "week": { "type": "integer", "description": "Current gestational week (1 to 40)" },
+        "drNotes": { "type": "string", "description": "Notes from clinical practitioners" },
+        "vitals": {
+          "type": "object",
+          "description": "Biological vitals parameters (Hgb, A1C, blood sugar, blood pressure, weight)"
+        },
+        "checks": {
+          "type": "object",
+          "description": "Interlocking list checklist of completed gestational tasks"
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["week", "updatedAt"]
+    },
+    "JournalEntry": {
+      "title": "JournalEntry",
+      "description": "A single physical and psychological daily log write",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "week": { "type": "integer" },
+        "mood": { "type": "string" },
+        "emoji": { "type": "string" },
+        "text": { "type": "string" },
+        "symptoms": { "type": "array" },
+        "advice": { "type": "string" },
+        "quick": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "date", "week", "mood", "emoji", "text", "symptoms", "createdAt"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "An upcoming clinical scan or consultation visit",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "note": { "type": "string" },
+        "done": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "date", "done", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "High fidelity gestational user container document"
+    },
+    "/users/{userId}/entries/{entryId}": {
+      "schema": "JournalEntry",
+      "description": "User's symptom journal feed collection"
+    },
+    "/users/{userId}/appointments/{apptId}": {
+      "schema": "Appointment",
+      "description": "User's prenatal diagnostic booking logs"
+    }
+  }
+}

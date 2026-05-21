@@ -4,6 +4,7 @@ import { VitalsProfile, JournalEntry, getWeekData } from "../types";
 import { Sparkles, Heart, Scale, CalendarDays, Activity } from "lucide-react";
 
 interface HomeProps {
+  displayName?: string;
   week: number;
   onWeekChange: (w: number) => void;
   vitals: VitalsProfile;
@@ -13,6 +14,7 @@ interface HomeProps {
 }
 
 export default function Home({
+  displayName,
   week,
   onWeekChange,
   vitals,
@@ -100,7 +102,7 @@ export default function Home({
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2.5">
             <span className="font-mono text-[11px] font-bold tracking-[0.3em] text-[#FF3E00] uppercase block">
-              [ CASE PROFILE: GE-40 ]
+              [ {displayName ? `MATERNAL PROFILE: ${displayName}` : "CASE PROFILE: GE-40"} ]
             </span>
             <div className="flex items-baseline gap-2.5">
               <h1 className="text-8xl font-black tracking-tighter leading-none text-white">{week}</h1>
