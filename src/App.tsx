@@ -66,6 +66,16 @@ export default function App() {
     return localStorage.getItem("petal_bypass_offline") === "true";
   });
   const [landingName, setLandingName] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [isInIframe, setIsInIframe] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
+      setIsInIframe(window.self !== window.top);
+    } catch (e) {
+      setIsInIframe(true);
+    }
+  }, []);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -217,11 +227,23 @@ export default function App() {
   const handleGoogleLogin = async () => {
     try {
       setLoadingAuth(true);
+      setAuthError(null);
       await signInWithPopup(auth, googleProvider);
       showToast("Signed in via Google successfully! 🔑");
-    } catch (err) {
-      console.error(err);
-      showToast("Google connection declined.");
+    } catch (err: any) {
+      console.error("Authentication Error Detail:", err);
+      let errMsg = err instanceof Error ? err.message : String(err);
+      if (err?.code) {
+        errMsg = `Firebase Error: ${err.code} - ${err.message}`;
+      }
+      setAuthError(errMsg);
+      
+      const isIframe = window.self !== window.top;
+      if (isIframe) {
+        showToast("Blocked by iframe sandboxing! Open in a new tab.");
+      } else {
+        showToast("Google connection declined or failed.");
+      }
     } finally {
       setLoadingAuth(false);
     }
@@ -240,6 +262,7 @@ export default function App() {
       setChecks({});
       setDisplayName("");
       setBypassOffline(false);
+      setAuthError(null);
       localStorage.removeItem("petal_bypass_offline");
       localStorage.removeItem("petal_offline_name");
       showToast("Safely signed out from cloud. 👋");
@@ -566,9 +589,16 @@ export default function App() {
           >
             {/* Primary Action Button: Auth */}
             <div className="space-y-3">
-              <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FF3E00]" />
-                <span className="font-mono text-[9px] uppercase tracking-widest text-[#FF3E00] font-black">RECOMMENDED / SECURE SYNC</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF3E00]" />
+                  <span className="font-mono text-[9px] uppercase tracking-widest text-[#FF3E00] font-black">RECOMMENDED / SECURE SYNC</span>
+                </div>
+                {isInIframe && (
+                  <span className="text-[9px] bg-amber-500/15 text-amber-400 border border-amber-500/20 px-2 py-0.5 font-mono tracking-wider font-bold">
+                    [ IFRAME DETECTED ]
+                  </span>
+                )}
               </div>
               <button
                 onClick={handleGoogleLogin}
@@ -576,6 +606,38 @@ export default function App() {
               >
                 <LogIn className="w-4 h-4" /> SECURE GMAIL CLOUD SYNC & LOGIN
               </button>
+
+              {/* Iframe Hint Banner */}
+              {isInIframe && (
+                <div className="bg-amber-500/10 border border-amber-500/25 p-3.5 space-y-1.5 text-[11px] leading-relaxed text-amber-300 font-mono">
+                  <span className="font-extrabold text-amber-400 block tracking-wider uppercase text-[10px]">
+                    ⚠️ BROWSER SANDBOX LIMITATION
+                  </span>
+                  <p className="text-[10px] text-amber-200/85">
+                    Google Sign-In popups are blocked inside standard embedded frames. To authenticate through your secure Gmail cloud, click the <strong className="text-white font-sans font-bold">"Open in a new tab"</strong> button at the top-right of the AI Studio preview bar, or use the offline sandbox below!
+                  </p>
+                </div>
+              )}
+
+              {/* Detailed Error Diagnostics Box */}
+              {authError && (
+                <div className="bg-red-500/10 border border-red-500/25 p-3.5 space-y-2 text-[11px] leading-relaxed text-red-300 font-mono">
+                  <span className="font-bold text-red-400 block tracking-wider uppercase text-[10px]">
+                    🔴 DIAGNOSTIC LOG REPORT
+                  </span>
+                  <p className="text-[10px] text-red-200/85 break-words">
+                    {authError}
+                  </p>
+                  <p className="text-[10px] text-white/50 border-t border-white/10 pt-1.5">
+                    If this is an "auth/unauthorized-domain" mismatch, please go to your <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer" className="text-[#FF3E00] underline hover:text-white">Firebase Console</a> → Auth → Settings → <strong>Authorized Domains</strong> and add both:
+                    <br />
+                    <span className="text-white select-all block mt-1 bg-white/5 p-1 rounded font-mono text-[10px]">
+                      {window.location.hostname}
+                    </span>
+                  </p>
+                </div>
+              )}
+
               <p className="text-[10px] text-white/40 leading-relaxed font-light text-center">
                 Syncs metrics, journal diaries, and scheduled doctor checks inside Google Firestore database securely.
               </p>
