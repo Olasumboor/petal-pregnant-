@@ -638,6 +638,26 @@ export default function App() {
                 </div>
               )}
 
+              {/* Netlify/Custom Production Deployment Helper Guide */}
+              {(typeof window !== "undefined" && (window.location.hostname.includes("netlify.app") || (!["localhost", "127.0.0.1"].includes(window.location.hostname) && !window.location.hostname.includes("run.app")))) && (
+                <div className="bg-[#FF3E00]/5 border border-[#FF3E00]/25 p-4 space-y-2 text-[11px] leading-relaxed text-white/80 font-mono">
+                  <span className="font-extrabold text-[#FF3E00] block tracking-wider uppercase text-[10px]">
+                    🌍 DEPLOYED DOMAIN DETECTED
+                  </span>
+                  <p className="text-[10px] text-white/70">
+                    To enable Google Log In on this production environment, you must add this domain to your Firebase Authorized list.
+                  </p>
+                  <div className="bg-white/[0.03] p-2.5 space-y-1.5 border border-white/5 text-[10px] text-white/40">
+                    <span className="font-bold text-white/60 block">3-STEP CONFIGURATION:</span>
+                    <ol className="list-decimal pl-4 space-y-1 text-[10px] text-white/60">
+                      <li>Go to the <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer" className="text-[#FF3E00] underline hover:text-white">Firebase Console</a></li>
+                      <li>Select your project, click <strong className="text-white">Authentication</strong> &rarr; <strong className="text-white">Settings</strong> tab &rarr; <strong className="text-white">Authorized domains</strong></li>
+                      <li>Click "Add domain" and enter: <strong className="text-[#FF3E00] select-all bg-white/5 px-1 py-0.5 font-mono">{window.location.hostname}</strong></li>
+                    </ol>
+                  </div>
+                </div>
+              )}
+
               <p className="text-[10px] text-white/40 leading-relaxed font-light text-center">
                 Syncs metrics, journal diaries, and scheduled doctor checks inside Google Firestore database securely.
               </p>
